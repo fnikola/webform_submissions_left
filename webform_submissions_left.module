@@ -1,0 +1,44 @@
+<?php
+// $Id: webform_submissions_left.module,v 1.46.2.24 2013/08/21 03:30:00 fnikola Exp $
+
+/**
+ * Implements hook_node_view().
+ */
+function webform_submissions_left_node_view(&$node, $teaser = NULL , $page = NULL) {
+  global $user;
+  if ($user->uid == 395541) {
+    
+  }
+  // Check if the user can add another submission if there is a limit on total
+  // submissions.
+  if ($node->webform['total_submit_limit'] != -1) { // -1: Submissions are never throttled.
+    // module_load_include('inc', 'webform', 'includes/webform.submissions');
+
+    // Check if submission limiting is enabled.
+    if ($node->webform['total_submit_limit'] != '-1') {
+      // Retrieve submission data from the database.
+      $query = 'SELECT count(*) ' .
+               'FROM {webform_submissions} ' .
+               'WHERE submitted > %d AND nid = %d AND is_draft = 0';
+      // Fetch all the entries from the database within the submit interval.
+      $num_submissions_database = db_result(db_query($query, ($node->webform['total_submit_interval'] != -1) ? (time() - $node->webform['total_submit_interval']) : $node->webform['total_submit_interval'], $node->nid));
+    } else {
+      $num_submissions_database = -1;
+    }
+ 
+  }
+  
+  // Print out messages for the webform.
+  if ($node->build_mode != NODE_BUILD_PREVIEW && !isset($node->webform_block) && !$logging_in) {
+    theme('webform_view_messages_count', $node, $num_submissions_database);
+  }
+
+}
+
+function theme_webform_view_messages_count($node, $num_submissions_database) {
+  global $user;
+  $message = t('There are already !submissions submissions for this form.', array('!submissions' => $num_submissions_database));
+  if (isset($message)) {
+    drupal_set_message($message, $type, FALSE);
+  }
+}
