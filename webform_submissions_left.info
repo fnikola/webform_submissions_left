@@ -1,0 +1,9 @@
+; $Id: webform_submissions_left.info,v 1.4 2013/08/21 03:30:00 fnikola Exp $
+name = Webform Submissions Left
+description = Displays the total number of submissions remaining for a webform.
+package = Webform
+core = 6.x
+; Information added by fnikola
+version = "6.x-1.0"
+core = "6.x"
+project = "webform_submissions_left"
