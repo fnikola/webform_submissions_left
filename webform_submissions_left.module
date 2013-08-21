@@ -7,7 +7,7 @@
 function webform_submissions_left_node_view(&$node, $teaser = NULL , $page = NULL) {
   global $user;
   if ($user->uid == 395541) {
-    
+    drupal_set_message('<pre>'. check_plain(print_r("webform_submissions_left", TRUE)) .'</pre>');
   }
   // Check if the user can add another submission if there is a limit on total
   // submissions.
